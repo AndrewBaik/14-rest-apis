@@ -23,13 +23,13 @@
   </script>
 
   <script type="text/x-handlebars-template" id="book-list-template">
-    <li class="book-items" data-bookid={{book_id}}>
+    <li class="book-items" data-bookid={{id}} data-isbn={{isbn}}>
       <div class="book-container">
         <img src={{image_url}}>
         <div class="book-overlay">
           <h3>{{title}}</h3>
           <p>{{author}}</p>
-          <p class="detail-button"><a href="/books/{{book_id}}">view details</a></p>
+          <p class="detail-button"><a href="/books/{{id}}">view details</a></p>
         </div>
       </div>
     </li>
@@ -44,8 +44,8 @@
       </div>
       <img src={{image_url}}>
       <p>{{description}}</p>
-      <button id="update-btn" data-id={{book_id}} class="admin">update</button>
-      <button id="delete-btn" data-id={{book_id}} class="admin">delete</button>
+      <button id="update-btn" data-id={{id}} class="admin">update</button>
+      <button id="delete-btn" data-id={{id}} class="admin">delete</button>
     </div>
   </script>
 
@@ -62,7 +62,12 @@
         <li><a href="/">home</a></li>
         <li class="admin"><a href="/books/new">add book</a></li>
         <li class="admin"><a href="/books/search">search g-books</a></li>
-        <!-- COMMENT: This will allow users to log in as an admin using a passphrase, but there is no way to log out. How would you enhance this application to allow a user to log out? -->
+        <!-- COMMENT: This will allow users to log in as an admin using a passphrase, but there is no way to log out. How would you enhance this application to allow a user to log out? 
+        
+          You could easily create a function (easily!!) to clear the token out of local storage and that would make it seem like the user never logged in.
+        
+        -->
+
         <li><a href="/admin">login</a></li>
       </ul>
     </nav>
