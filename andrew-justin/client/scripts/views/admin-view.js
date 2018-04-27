@@ -15,20 +15,21 @@ var app = app || {};
       let token = event.target.passphrase.value;
 
       // COMMENT: Is the token cleared out of local storage? Do you agree or disagree with this structure?
+      // NO it stores it in local storage. Well with this no matter what is typed in it will set the token to true.
       $.get(`${ENV.apiUrl}/api/v1/admin`, {token})
         .then(res => {
           localStorage.token = true;
           page('/');
         })
         .catch(() => page('/'));
-    })
+    });
   };
 
   adminView.verify = function(ctx, next) {
     if(!localStorage.token) $('.admin').addClass('admin-only');
     else $('.admin').show();
     next();
-  }
+  };
 
   module.adminView = adminView;
-})(app)
+})(app);

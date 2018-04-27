@@ -4,7 +4,7 @@ var app = app || {};
 (function(module) {
   $('.icon-menu').on('click', function(event) {
     $('.nav-menu').slideToggle(350);
-  })
+  });
 
   function resetView() {
     $('.container').hide();
@@ -18,8 +18,8 @@ var app = app || {};
     $('.book-view').show();
     $('#book-list').empty();
     module.Book.all.forEach(book => $('#book-list').append(book.toHtml()));
-    next()
-  }
+    next();
+  };
 
   bookView.initDetailPage = function(ctx, next) {
     resetView();
@@ -35,8 +35,8 @@ var app = app || {};
     $('#delete-btn').on('click', function() {
       module.Book.destroy($(this).data('id'));
     });
-    next()
-  }
+    next();
+  };
 
   bookView.initCreateFormPage = function() {
     resetView();
@@ -53,12 +53,12 @@ var app = app || {};
       };
 
       module.Book.create(book);
-    })
-  }
+    });
+  };
 
   bookView.initUpdateFormPage = function(ctx) {
     resetView();
-    $('.update-view').show()
+    $('.update-view').show();
     $('#update-form input[name="title"]').val(ctx.book.title);
     $('#update-form input[name="author"]').val(ctx.book.author);
     $('#update-form input[name="isbn"]').val(ctx.book.isbn);
@@ -69,7 +69,7 @@ var app = app || {};
       event.preventDefault();
 
       let book = {
-        book_id: ctx.book.book_id,
+        id: ctx.book.id,
         title: event.target.title.value,
         author: event.target.author.value,
         isbn: event.target.isbn.value,
@@ -77,19 +77,22 @@ var app = app || {};
         description: event.target.description.value,
       };
 
-      module.Book.update(book, book.book_id);
-    })
+      module.Book.update(book, book.id);
+    });
   };
 
-// COMMENT: What is the purpose of this method?
+  // COMMENT: What is the purpose of this method?
+  // This method initializes the Search Form when you click on searc g books and saves the user input into a variable to send as a query.
   bookView.initSearchFormPage = function() {
     resetView();
     $('.search-view').show();
     $('#search-form').on('submit', function(event) {
       // COMMENT: What default behavior is being prevented here?
+      // It prevents and the url change with the query.
       event.preventDefault();
 
       // COMMENT: What is the event.target, below? What will happen if the user does not provide the information needed for the title, author, or isbn properties?
+      // The event.target is the details of the form. If the user doesn't provide information the values will default to a empty string.
       let book = {
         title: event.target.title.value || '',
         author: event.target.author.value || '',
@@ -99,27 +102,31 @@ var app = app || {};
       module.Book.find(book, bookView.initSearchResultsPage);
 
       // COMMENT: Why are these values set to an empty string?
+      // These values are set to empty for future use (when you come to use the search bar to make sure it's empty).
       event.target.title.value = '';
       event.target.author.value = '';
       event.target.isbn.value = '';
-    })
-  }
+    });
+  };
 
   // COMMENT: What is the purpose of this method?
+  // THis Method takes the results from the google api search and then displays them in a list.
   bookView.initSearchResultsPage = function() {
     resetView();
     $('.search-results').show();
     $('#search-list').empty();
 
     // COMMENT: Explain how the .forEach() method is being used below.
+    // It's being used to apply the appending toHtml to every item in the Book.all array, which will be the results of our search.
     module.Book.all.forEach(book => $('#search-list').append(book.toHtml()));
     $('.detail-button a').text('Add to list').attr('href', '/');
     $('.detail-button').on('click', function(e) {
       // COMMENT: Explain the following line of code.
-      module.Book.findOne($(this).parent().parent().parent().data('bookid'))
+      // This applied to the 'add to list button', so that when a user clicks one book, that book will be saved to the DB.
+      module.Book.findOne($(this).parent().parent().parent().data('isbn'));
     });
-  }
+  };
 
   module.bookView = bookView;
-})(app)
+})(app);
 
